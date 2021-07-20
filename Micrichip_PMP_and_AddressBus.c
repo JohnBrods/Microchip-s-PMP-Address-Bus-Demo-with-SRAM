@@ -1337,8 +1337,8 @@ void Init_16Bit_PMP() {
   PMCONBits.DUALBUF = 0;   //DUAL BUFFER FOR IN AND OUT
   PMMODEbits.MODE = 2;     // Master 2     slave =1
   PMMODEbits.WAITB = 0;    //WAITB<1:0>: Data Setup to Read/Write Strobe Wait States bits(1) 11 = Data wait of 4 TPB; multiplexed address phase of 4 TPB  10 = Data wait of 3 TPB; multiplexed address phase of 3 TPB 01 = Data wait of 2 TPB; multiplexed address phase of 2 TPB 00 = Data wait of 1 TPB; multiplexed address phase of 1 TPB (default)
-  PMMODEbits.WAITM = 0;    //1111 = Wait of 16 TPB --0001 = Wait of 2 TPB-- 0000 = Wait of 1 TPB (default)
-  PMMODEbits.WAITE = 0;   //bit 1-0WAITE<1:0>: Data Hold After Read/Write Strobe Wait States bits(1)
+  PMMODEbits.WAITM = 1;    //1111 = Wait of 16 TPB --0001 = Wait of 2 TPB-- 0000 = Wait of 1 TPB (default)
+  PMMODEbits.WAITE = 1;   //bit 1-0WAITE<1:0>: Data Hold After Read/Write Strobe Wait States bits(1)
 
   PMMODEbits.MODE16 = 1;   // 1 = 16-bit mode: a read or write to the data register invokes a single 16-bit transfer   For read operations  11 = Wait of 3 TPB  00 = Wait of 0 TPB (default)
   PMCONbits.CSF = 0;      //chip select bit
@@ -1408,9 +1408,9 @@ void TFT_SET_MODE_SSD1963_5_Inch(){  // & newer 7"            Page 84 for timing
       TFT_Write_Command_Ptr(32);        //Bit 5 Is 24 Bit Colour On TFT Panel All Active Low Pulses  MIDAS TFT PANEL IS 24 BIT
       TFT_Write_Command_Ptr(0);         //BIT 6 & 5TFT MODE NOT SERIAL
       TFT_Write_Command_Ptr(0x03);      //03 SET horizontal size=800+1 HightByte   !!!!!!!!!!!!
-      TFT_Write_Command_Ptr(0x20);      //SET horizontal size=800+1 LowByte
+      TFT_Write_Command_Ptr(0x21);      //SET horizontal size=800+1 LowByte
       TFT_Write_Command_Ptr(0x01);      //SET vertical size=480+1 HightByte
-      TFT_Write_Command_Ptr(0xE0);      //SET vertical size=480+1 LowByte
+      TFT_Write_Command_Ptr(0xE1);      //SET vertical size=480+1 LowByte
       TFT_Write_Command_Ptr(0x00);      //Even line RGB sequence / Odd line RGB sequence RGB
 
       // Set LSHIFT freq (DCLK from PLL)
@@ -3366,8 +3366,9 @@ void main(){
                     for (x=0; x<130000; x++){
                     PMDIN = SRAM_BUFFER[x]; //WRITING TO SCREEN AND SRAM WORKS
                     while(PMMODE & 0x8000); //Busy bit
-                    if (x>65536){
+                    if (x>=65536){
                     RK0_bit = 1; }   // EBIA16/RK0    EBIA17/RK3  EBIA18/RK4   EBIA19/RK5
+                    Delay_us(100);
                    }
                     SRAM_CS = 1;
                     TFT_CS = 1;
@@ -3383,7 +3384,7 @@ void main(){
                    PMP_AddressSet(0);
                    for (x=0; x<130000; x++){
                    SRAM_BUFFER[x] = PMDIN; //READING SRAM  like screen capture this had worked
-                   if (x>65536){
+                   if (x>+65536){
                     RK0_bit = 1; }    // EBIA16/RK0    EBIA17/RK3  EBIA18/RK4   EBIA19/RK5
                   }
                    SRAM_CS = 1;
