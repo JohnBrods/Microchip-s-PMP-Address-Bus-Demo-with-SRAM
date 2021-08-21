@@ -22,7 +22,7 @@
 //
 // This file is a proof of concept, and is the code discussed in my YouTube video:
 //
-// "Microchip's (EBI) External Bus Interface & (DMA) Direct Memory Access + SSD1963"
+// "Microchip's Parallel Master Port & Address Bus, How to Calculate size of SRAM & SDRAM + SSD1963"
 // https://www.youtube.com/watch?v=l3t8FZs03tc
                                                     
 
